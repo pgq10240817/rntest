@@ -11,6 +11,7 @@ import android.widget.TextView;
 import com.facebook.react.bridge.Arguments;
 import com.facebook.react.bridge.ReactContext;
 import com.facebook.react.bridge.WritableMap;
+import com.facebook.react.modules.core.DeviceEventManagerModule;
 import com.facebook.react.uimanager.events.RCTEventEmitter;
 import com.facebook.react.uimanager.events.TouchEventType;
 
@@ -52,5 +53,14 @@ public class ToastTextView extends TextView implements View.OnClickListener {
     @Override
     public void onClick(View v) {
         sendEventToJS(getText().toString());
+        publishEvent();
+    }
+
+    private void publishEvent() {
+        WritableMap map = Arguments.createMap();
+        map.putInt("viewId", getId());
+        map.putString("ext", "测试");
+        ReactContext reactContext = (ReactContext) getContext();
+        reactContext.getJSModule(DeviceEventManagerModule.RCTDeviceEventEmitter.class).emit("yhpl", map);
     }
 }

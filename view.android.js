@@ -16,6 +16,13 @@ class MyComponent extends Component {
         super(props);
     }
 
+    componentDidMount() {
+        console.log('componentDidMount');
+        DeviceEventEmitter.addListener('yhpl', (event:Event)=> {
+            console.log('devices emit event :' + event.viewId + ' - ' + +event.ext);
+            ToastExt.showShortToast(event.viewId + ' - ' + +event.ext);
+        });
+    }
 
     render() {
         const divSly = {
