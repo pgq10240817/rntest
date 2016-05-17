@@ -14,6 +14,9 @@ public final class RNJSConsts {
         final static String DEFAULT_JS_NAME = "home.android";
         final static String COUNT = "count.android";
         final static String FLEXBOX = "flexbox.android";
+        static String ANIMATION = "animation.android";
+        static String NAV = "nav.android";
+        static String VIEW = "view.android";
     }
 
     public interface BUNDLE {
