@@ -47,6 +47,11 @@ public enum RNJSEnum implements RNIJSRes {
         public String getJsModuleName() {
             return MODULE.VIEW;
         }
+    }, BUTTON {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.BUTTON;
+        }
     };
 
 

@@ -17,6 +17,7 @@ public final class RNJSConsts {
         static String ANIMATION = "animation.android";
         static String NAV = "nav.android";
         static String VIEW = "view.android";
+        static String BUTTON = "button.android";
     }
 
     public interface BUNDLE {
