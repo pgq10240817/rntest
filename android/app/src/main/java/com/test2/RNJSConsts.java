@@ -12,6 +12,9 @@ public final class RNJSConsts {
 
     public interface MODULE {
         final static String DEFAULT_JS_NAME = "home.android";
+        static String EXAMPLE_FLEXBOX = "example.flexbox.android";
+        static String EXAMPLE_TRIP = "example.trip.android";
+        static String EXAMPLE_NETNEWS = "example.netnews.android";
         final static String COUNT = "count.android";
         final static String FLEXBOX = "flexbox.android";
         static String ANIMATION = "animation.android";

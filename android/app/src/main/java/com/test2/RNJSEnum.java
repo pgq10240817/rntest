@@ -22,6 +22,21 @@ public enum RNJSEnum implements RNIJSRes {
         public String getJsModuleName() {
             return MODULE.DEFAULT_JS_NAME;
         }
+    }, EXAMPLE_FLEXBOX {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.EXAMPLE_FLEXBOX;
+        }
+    }, EXAMPLE_TRIP {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.EXAMPLE_TRIP;
+        }
+    }, EXAMPLE_NETNEWS {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.EXAMPLE_NETNEWS;
+        }
     }, COUNT {
         @Override
         public String getJsModuleName() {
