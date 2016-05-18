@@ -1,61 +1,133 @@
 /**
  * Created by Administrator on 2016/5/17/017.
  */
-const ToastExt = require('./ToastExt');
-import React,{Component} from 'react';
+'use strict';
+import React, {Component} from 'react';
 import {
     AppRegistry,
-    StyleSheet,
-    View,
-    Navigator,
-    Text,
+    Platform,
     TouchableOpacity,
-    //ToastAndroid,
+    StyleSheet,
+    Navigator,
+    View,
+    Text
+} from 'react-native';
 
-} from 'react-native'
+import Splash from './app/module/Splash';
 
+const defaultRoute = {
+    component: Splash
+};
 
-//import {ToastAndroid} from 'ToastExt';
+class navigation extends Component {
+    _renderScene(route, navigator) {
+        let Component = route.component;
+        return (
+            <Component {...route.params} navigator={navigator}/>
+        );
+    }
 
-const ScenceFactory = ({color,title}) => {
-    const divSly = {backgroundColor: color, flex: 1, justifyContent: 'center', alignItems: 'center'};
-    const labelSly = {fontSize: 16, color: 'teal', backgroundColor: 'seashell'};
-    return (
-        <View style={divSly}>
-            <TouchableOpacity
-                onPress={()=>{
-                ToastExt.showShortToast('我我我');
-                    //ToastAndroid.show('哈哈',1);
-                }}>
-                <Text style={labelSly}>{title}</Text>
-            </TouchableOpacity>
-        </View>
-    )
+    _renderNavBar() {
+        const styles = {
+            title: {
+                flex: 1, alignItems: 'center', justifyContent: 'center'
+            },
+            button: {
+                flex: 1, width: 50, alignItems: 'center', justifyContent: 'center'
+            },
+            buttonText: {
+                fontSize: 18, color: '#FFFFFF', fontWeight: '400'
+            }
+        }
 
-}
-class NavComponet extends Component {
-    constructor(props) {
-        super(props);
+        var routeMapper = {
+            LeftButton(route, navigator, index, navState) {
+                if (index > 0) {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => navigator.pop()}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>Back</Text>
+                        </TouchableOpacity>
+                    );
+                } else {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => navigator.pop()}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}>Logo</Text>
+                        </TouchableOpacity>
+                    );
+                }
+            },
+            RightButton(route, navigator, index, navState) {
+                if (index > 0 && route.rightButton) {
+                    return (
+                        <TouchableOpacity
+                            onPress={() => navigator.pop()}
+                            style={styles.button}>
+                            <Text style={styles.buttonText}></Text>
+                        </TouchableOpacity>
+                    );
+                } else {
+                    return null
+                }
+
+            },
+            Title(route, navigator, index, navState) {
+                return (
+                    <View style={styles.title}>
+                        <Text style={styles.buttonText}>{route.title ? route.title : 'Splash'}</Text>
+                    </View>
+                );
+            }
+        };
+
+        return (
+            <Navigator.NavigationBar
+                style={{
+          alignItems: 'center',
+          backgroundColor: '#55ACEE',
+          shadowOffset:{
+              width: 1,
+              height: 0.5,
+          },
+          shadowColor: '#55ACEE',
+          shadowOpacity: 0.8,
+          }}
+                routeMapper={routeMapper}
+            />
+        );
     }
 
     render() {
-
-        return this.renderNav();
-    }
-
-    renderNav() {
         return (
             <Navigator
-                initialRoute={{name: 'My First Scene', index: 0}}
-                renderScene={(route, navigator) =>
-              <ScenceFactory
-                color="whitesmoke"
-                title="scence1">
-              </ScenceFactory>
-            }
-            />
-        )
+                initialRoute={defaultRoute}
+                renderScene={this._renderScene}
+                sceneStyle={{paddingTop: (Platform.OS === 'android' ? 66 : 74)}}
+                navigationBar={this._renderNavBar()}/>
+        );
     }
 }
 
-AppRegistry.registerComponent('Test2', ()=>NavComponet);
+const styles = StyleSheet.create({
+    container: {
+        flex: 1,
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: '#F5FCFF',
+    },
+    welcome: {
+        fontSize: 20,
+        textAlign: 'center',
+        margin: 10,
+    },
+    instructions: {
+        textAlign: 'center',
+        color: '#333333',
+        marginBottom: 5,
+    },
+});
+
+AppRegistry.registerComponent('Test2', ()=>navigation);

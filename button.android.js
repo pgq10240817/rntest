@@ -1,12 +1,14 @@
 /**
  * Created by Administrator on 2016/5/17/017.
  */
-import React, {Component} from 'react';
+import React, {Component, PropTypes} from 'react';
 import {
     AppRegistry,
     StyleSheet,
     Platform,
     View,
+    Text,
+    TouchableOpacity,
     TouchableNativeFeedback
 } from 'react-native';
 const APSLButton = require('./app/view/APSLButton');
@@ -73,6 +75,85 @@ const styles = {
         color: '#333',
     }
 }
+class MyButton extends Component {
+    render() {
+        const divBox = {
+            backgroundColor: '#ccc',
+            padding: 10,
+            borderRadius: 5,
+            borderWidth: 2,
+            borderColor: '#f00'
+        };
+        const label = {
+            fontSize: 16,
+            color: '#f00',
+        };
+        return (
+            <View >
+                <TouchableOpacity style={divBox}>
+                    <Text style={label}>
+                        good...
+                    </Text>
+                </TouchableOpacity>
+
+            </View>
+        )
+    }
+}
+class MyNativeButton extends Component {
+    static propTypes = {
+        background: (TouchableNativeFeedback.propTypes) ? TouchableNativeFeedback.propTypes.background : PropTypes.any,
+        onPress: PropTypes.func,
+        onLongPress: PropTypes.func,
+        onPressIn: PropTypes.func,
+        onPressOut: PropTypes.func,
+    };
+
+    componentDidMount() {
+        console.log('componentDidMount');
+    }
+
+    render() {
+        console.log('--->:render');
+        const divBox = {
+            backgroundColor: '#ccc',
+            borderRadius: 10,
+            borderWidth: 1,
+            borderColor: '#f00',
+            height: 44,
+            justifyContent: 'center',
+            alignItems: 'center',
+        };
+        const label = {
+            fontSize: 16,
+            flexDirection: 'column',
+            justifyContent: 'center',
+            alignItems: 'center',
+            color: '#f00',
+            backgroundColor: '#0000EE',
+        };
+        const touchableProps = {
+            onPress: this.props.onPress,
+            onPressIn: this.props.onPressIn,
+            onPressOut: this.props.onPressOut,
+            onLongPress: this.props.onLongPress
+        };
+        const touchablePropsAndroid = Object.assign(touchableProps, {
+            background: this.props.background || TouchableNativeFeedback.SelectableBackground()
+        });
+        return (
+            <TouchableNativeFeedback {...touchablePropsAndroid} >
+                <Text style={divBox}>
+                    <Text style={label}>
+                        good...
+                    </Text>
+                </Text>
+            </TouchableNativeFeedback>
+
+        )
+    }
+
+}
 class MyComponent extends Component {
     constructor(props) {
         super(props);
@@ -80,7 +161,7 @@ class MyComponent extends Component {
 
     render() {
         const divRootSly = {
-            backgroundColor: 'whitesmoke',
+            backgroundColor: '#009ACD',
             flexDirection: 'column',
             justifyContent: 'center',
             alignItems: 'stretch',
@@ -88,6 +169,21 @@ class MyComponent extends Component {
         };
         return (
             <View style={divRootSly}>
+                <MyNativeButton
+                    onPress={()=>{
+                        console.log('onPress');
+                        }}
+                    onPressIn={()=>{
+                       console.log('onPressIn');
+                    }}
+                    onPressOut={()=>{
+                       console.log('onPressOut');
+                    }}
+                    onLongPress={()=>{
+                       console.log('onLongPress');
+                    }}
+                >
+                </MyNativeButton>
                 <APSLButton
                     style={styles.buttonStyle} textStyle={styles.textStyle}
                     onPress={() => {
