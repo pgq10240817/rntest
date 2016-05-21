@@ -72,6 +72,51 @@ public enum RNJSEnum implements RNIJSRes {
         public String getJsModuleName() {
             return MODULE.CALCULATOR;
         }
+    }, DAY30_1 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_1;
+        }
+    }, DAY30_2 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_2;
+        }
+    }, DAY30_3 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_3;
+        }
+    }, DAY30_4 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_4;
+        }
+    }, DAY30_5 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_5;
+        }
+    }, DAY30_6 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_6;
+        }
+    }, DAY30_7 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_7;
+        }
+    }, DAY30_8 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_8;
+        }
+    }, DAY30_9 {
+        @Override
+        public String getJsModuleName() {
+            return MODULE.DAY30_9;
+        }
     };
 
 

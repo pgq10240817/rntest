@@ -22,6 +22,17 @@ public final class RNJSConsts {
         static String VIEW = "view.android";
         static String BUTTON = "button.android";
         static String CALCULATOR = "calculator.android";
+        static String DAY30_1 = "day30_1.android";
+        static String DAY30_2 = "day30_2.android";
+        static String DAY30_3 = "day30_3.android";
+        static String DAY30_4 = "day30_4.android";
+        static String DAY30_5 = "day30_5.android";
+        static String DAY30_6 = "day30_6.android";
+        static String DAY30_7 = "day30_7.android";
+        static String DAY30_8 = "day30_8.android";
+        static String DAY30_9 = "day30_9.android";
+
+
     }
 
     public interface BUNDLE {
