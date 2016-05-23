@@ -8,7 +8,8 @@ import {
     Text,
     TouchableOpacity,
 } from 'react-native';
-import {CountTimeComponent} from './app/30days/day1/view/CountTimeRender2.native'
+//import {CountTimeComponent} from './app/30days/day1/view/CountTimeRender2.native'
+import {CountTimeComponent,PannelComponent,TimerRecordComponent} from './app/30days/day1/view/CountTimeRender.native'
 const styles = {
     divRoot: {
         flex: 1,
@@ -17,27 +18,69 @@ const styles = {
         alignItems: 'center',
         backgroundColor: 'whitesmoke',
     },
+    divTop: {
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+        backgroundColor: 'whitesmoke',
+    },
+    listView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        backgroundColor: 'whitesmoke',
+    },
+
+    divListView: {
+        flex: 1,
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'stretch',
+        backgroundColor: 'whitesmoke',
+    },
 
 }
 
+class MyComponent extends Component {
+    componentWillMount() {
+        console.log('MyComponent  componentWillMount ');
+    }
+
+    componentWillUnMount() {
+        console.log('MyComponent  componentWillUnMount ');
+    }
+
+    componentDidUnMount() {
+        console.log('MyComponent  componentDidUnMount ');
+    }
+
+    componentDidMount() {
+        console.log(' MyComponent componentDidMount ');
+    }
+
+    render() {
+        return (
+            <View style={styles.divRoot}>
+                <View style={styles.divTop}>
+                    <CountTimeComponent/>
+                    <PannelComponent />
+                </View>
+                <View style={styles.divListView}>
+                    <TimerRecordComponent style={styles.listView}/>
+                </View>
+            </View>
+        )
+    }
+}
 //class MyComponent extends Component {
 //    render() {
 //        return (
 //            <View style={styles.divRoot}>
 //                <CountTimeComponent/>
-//                <PannelComponent />
 //            </View>
 //        )
 //    }
 //}
-class MyComponent extends Component {
-    render() {
-        return (
-            <View style={styles.divRoot}>
-                <CountTimeComponent/>
-            </View>
-        )
-    }
-}
 AppRegistry.registerComponent('Test2', ()=>MyComponent);
 

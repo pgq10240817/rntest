@@ -48,7 +48,7 @@ Dispatcher.prototype = assign({}, Dispatcher.prototype, {
     }
 });
 
-var AppDispatcher = assign({}, Dispatcher.prototype, {
+var AppDispatcher = assign({}, Dispacther.prototype, {
 
     /**
      * A bridge function between the views and the dispatcher, marking the action

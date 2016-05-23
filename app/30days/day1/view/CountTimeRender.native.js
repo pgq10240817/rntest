@@ -6,8 +6,11 @@ import React, {Component} from 'react';
 import {
     View,
     Text,
+    ListView,
     TouchableOpacity,
+    TouchableHighlight,
 } from 'react-native';
+import AppDispatcher from '../module/dispatcher/AppDispatcher'
 const styles = {
     divRootCountTime: {
         alignSelf: 'stretch',
@@ -53,38 +56,81 @@ const styles = {
 let sdurationTotal = 0;
 let sdurationSingle = 0;
 const initalTime = '00:00:000';
+const TXT_RECORD = '计次';
+const TXT_RESET = '复位';
+const TXT_START = '开始';
+const TXT_STOP = '停止';
 
 class PannelComponent extends Component {
     // 构造
     constructor(props) {
         super(props);
         // 初始状态
+        this.state = {
+            labelRecord: TXT_RECORD,
+            labelRun: TXT_START,
+        }
 
     }
 
-    _onButtonStartClicked() {
-        this.props.countComponent.start();
+
+    componentDidMount() {
+
     }
 
-    _onButtonStopClicked() {
-        this.props.countComponent.reset();
+
+    _onButtonRunClicked() {
+        //this.props.countComponent.start();
+
+        let actionVal = this.state.labelRun === TXT_START ? 'start' : 'stop';
+        let lableRunNext = this.state.labelRun === TXT_START ? TXT_STOP : TXT_START;
+        let labelRecordNext = this.state.labelRun === TXT_START ? TXT_RECORD : TXT_RESET;
+        AppDispatcher.handleViewAction({
+            actionType: 'click',
+            actionValue: actionVal,
+        });
+
+        this.setState({
+            labelRun: lableRunNext,
+            labelRecord: labelRecordNext,
+
+        });
+    }
+
+    _onButtonRecordClicked() {
+        let actionVal = this.state.labelRecord === TXT_RECORD ? 'record' : 'reset';
+        let labelRecordNext = TXT_RECORD;
+        if (this.state.labelRun === TXT_STOP) {//running
+            //no-op
+        } else {
+            labelRecordNext = TXT_RESET;
+        }
+        AppDispatcher.handleViewAction({
+            actionType: 'click',
+            actionValue: actionVal,
+        });
+        this.setState({
+            labelRecord: labelRecordNext,
+
+        });
     }
 
     render() {
 
         return (
             <View style={styles.divRootPannel}>
-                <TouchableOpacity style={styles.labelButtonDiv} onPress={this._onButtonStartClicked}>
-                    <Text style={styles.labelButton}>{'开始'}</Text>
+                <TouchableOpacity style={styles.labelButtonDiv} onPress={this._onButtonRunClicked.bind(this)}>
+                    <Text style={styles.labelButton}>{this.state.labelRun}</Text>
                 </TouchableOpacity>
-                <TouchableOpacity style={styles.labelButtonDiv} onPress={this._onButtonStopClicked()}>
-                    <Text style={styles.labelButton}>{'停止'}</Text>
+                <TouchableOpacity style={styles.labelButtonDiv} onPress={this._onButtonRecordClicked.bind(this)}>
+                    <Text style={styles.labelButton}>{this.state.labelRecord}</Text>
                 </TouchableOpacity>
             </View>
         )
     }
 
 }
+
 class CountTimeComponent extends Component {
 
     // 构造
@@ -95,16 +141,58 @@ class CountTimeComponent extends Component {
             interval: null,
             durationTotal: initalTime,
             durationSingle: initalTime,
+            runFlag: false,
             dateBegin: new Date(),
-            dateEnd: new Date(),
+            dateBeginSingle: new Date(),
+            dateOffsetSingle: 0,
+            dateOffset: 0,
         }
         this._count = this._count.bind(this);
+        this._onPannelListener = this._onPannelListener.bind(this);
+        //this.start = this.start.bind(this);
+        //this.reset = this.reset.bind(this);
     }
 
-    _count() {
-        sdurationTotal = sdurationTotal + 1;
-        console.log("_durationTotal:" + sdurationTotal);
-        let offset = new Date() - this.state.dateBegin;
+    _onPannelListener(action) {
+        let actionType = action.actionType;
+        if (actionType === 'click') {
+            let actionVal = action.actionValue;
+
+            console.log('_onPannelListener ---> ' + actionVal);
+            if (actionVal === 'start') {
+                this.start();
+            } else if (actionVal === 'reset') {
+                this.reset();
+            } else if (actionVal === 'record') {
+                this.record();
+            } else if (actionVal === 'stop') {
+                this.stop();
+            }
+        }
+    }
+
+    componentWillMount() {
+        console.log(' componentWillMount---> ');
+    }
+
+    componentDidMount() {
+        console.log(' componentDidMount---> ');
+        this.setState({
+            dateBegin: new Date(),
+            dateEnd: new Date(),
+        });
+        AppDispatcher.addListener(this._onPannelListener);
+
+    }
+
+    componentWillUnMount() {
+        clearInterval(this.state.interval);
+        AppDispatcher.removeListener(this._onPannelListener);
+    }
+
+
+    _getDuration = (date, offsetTime)=> {
+        let offset = new Date() - date + offsetTime;
         let sec = (offset / 1000).toFixed();
         let min = (sec / 60).toFixed();
         let ms = offset % 1000;
@@ -113,7 +201,6 @@ class CountTimeComponent extends Component {
         min = min % 60;
         let _durationTotal = "";
 
-        _durationTotal = _durationTotal + hour + ":";
         if (min <= 9) {
             _durationTotal = _durationTotal + '0';
         }
@@ -129,35 +216,44 @@ class CountTimeComponent extends Component {
         }
         _durationTotal = _durationTotal + ms;
 
+        return _durationTotal;
+    }
+    _getDurationAsLong = (date)=> {
+        return new Date() - date;
+    }
 
+    _count() {
         this.setState({
-            durationTotal: _durationTotal,
-            durationSingle: _durationTotal,
+            durationTotal: this._getDuration(this.state.dateBegin, this.state.dateOffset),
+            durationSingle: this._getDuration(this.state.dateBeginSingle, this.state.dateOffsetSingle),
         });
 
     }
-
-    componentDidMount() {
-        this.setState({
-            dateBegin: new Date(),
-            dateEnd: new Date(),
-        });
-
-    }
-
-    componentWillUnMount() {
-        clearInterval(this.state.interval);
-    }
-
 
     start() {
         clearInterval(this.state.interval);
+
         this.setState({
             dateBegin: new Date(),
-            dateEnd: new Date(),
-            durationTotal: initalTime,
-            durationSingle: initalTime,
-            interval: setInterval(this._count, 100),
+            dateBeginSingle: new Date(),
+            runFlag: true,
+            durationTotal: this._getDuration(new Date(), this.state.dateOffset),
+            durationSingle: this._getDuration(new Date(), this.state.dateOffsetSingle),
+            interval: setInterval(this._count, 20),
+        });
+    }
+
+    stop() {
+        clearInterval(this.state.interval);
+        let lastOffset = this._getDurationAsLong(this.state.dateBegin) + this.state.dateOffset;
+        let lastOffsetSingle = this._getDurationAsLong(this.state.dateBeginSingle) + this.state.dateOffsetSingle;
+        console.log('stop  :: ' + lastOffset);
+        this.setState({
+            runFlag: false,
+            dateOffset: lastOffset,
+            dateOffsetSingle: lastOffsetSingle,
+            durationTotal: this._getDuration(this.state.dateBegin, this.state.dateOffset),
+            durationSingle: this._getDuration(this.state.dateBeginSingle, this.state.dateOffsetSingle),
         });
     }
 
@@ -165,7 +261,10 @@ class CountTimeComponent extends Component {
         clearInterval(this.state.interval);
         this.setState({
             dateBegin: null,
-            dateEnd: null,
+            dateBeginSingle: null,
+            dateOffset: 0,
+            dateOffsetSingle: 0,
+            runFlag: false,
             durationTotal: initalTime,
             durationSingle: initalTime,
             interval: null,
@@ -173,7 +272,14 @@ class CountTimeComponent extends Component {
     }
 
     record() {
-
+        let actionVal = this._getDuration(this.state.dateBeginSingle, this.state.dateOffsetSingle);
+        AppDispatcher.handleViewAction({
+            actionType: 'record',
+            actionValue: actionVal,
+        });
+        this.setState({
+            dateBeginSingle: new Date(),
+        });
     }
 
     render() {
@@ -185,5 +291,78 @@ class CountTimeComponent extends Component {
         )
     }
 }
-export default {CountTimeComponent, PannelComponent};
-module.exports = {CountTimeComponent, PannelComponent};
+class TimerRecordComponent extends Component {
+    constructor(props) {
+        super(props);
+        var ds = new ListView.DataSource({
+            rowHasChanged: (r1, r2) => r1 !== r2
+        });
+        this.state = {
+            data: [],
+            dataSource: ds.cloneWithRows(['1', '2']),
+        }
+        this._onPannelListener = this._onPannelListener.bind(this);
+    }
+
+    _onPannelListener = (action)=> {
+        let actionType = action.actionType;
+        if (actionType === 'record') {
+            let actionVal = action.actionValue;
+            let dataNew = [actionVal, ...this.state.data];
+            var ds = new ListView.DataSource({
+                rowHasChanged: (r1, r2) => r1 !== r2
+            });
+            this.setState({
+                data: dataNew,
+                dataSource: ds.cloneWithRows(dataNew),
+            });
+        }
+    }
+
+    componentDidMount() {
+        this.setState({
+            dataSource: this.state.dataSource.cloneWithRows(['row 1', 'row 2', 'row 3'])
+        });
+        AppDispatcher.addListener(this._onPannelListener);
+    }
+
+    componentWillUnMount() {
+        AppDispatcher.removeListener(this._onPannelListener);
+    }
+
+    _renderRow = (rowData:string, sectionID:number, rowID:number) => {
+        //var rowHash = Math.abs(hashCode(rowData));
+        //let labelStr = this.state.dataSource[rowHash % this.state.dataSource.length];
+        let labelStr = '1111';
+        return (
+            <TouchableHighlight>
+                <View>
+                    <View>
+                        <Text>
+                            {rowData + ' - ' + labelStr}
+                        </Text>
+                    </View>
+                </View>
+            </TouchableHighlight>
+        );
+    }
+
+    render() {
+        return (
+            <ListView
+                dataSource={this.state.dataSource}
+                renderRow={this._renderRow}
+            />
+        )
+    }
+}
+export
+default {
+    CountTimeComponent
+    ,
+    PannelComponent
+    ,
+    TimerRecordComponent
+}
+;
+module.exports = {CountTimeComponent, PannelComponent, TimerRecordComponent};
