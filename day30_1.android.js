@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 //import {CountTimeComponent} from './app/30days/day1/view/CountTimeRender2.native'
-import {CountTimeComponent,PannelComponent,TimerRecordComponent} from './app/30days/day1/view/CountTimeRender.native'
+import {TimerComponent,PannelComponent,TimerRecordComponent} from './app/30days/day1/view/CountTimeRender.native'
 const styles = {
     divRoot: {
         flex: 1,
@@ -63,7 +63,7 @@ class MyComponent extends Component {
         return (
             <View style={styles.divRoot}>
                 <View style={styles.divTop}>
-                    <CountTimeComponent/>
+                    <TimerComponent/>
                     <PannelComponent />
                 </View>
                 <View style={styles.divListView}>
