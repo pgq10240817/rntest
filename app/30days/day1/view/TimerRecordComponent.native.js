@@ -11,7 +11,36 @@ import {
     TouchableHighlight,
 } from 'react-native';
 import AppDispatcher from '../module/dispatcher/AppDispatcher'
+import Util from '../utils/utils';
 
+const styles = {
+    recordList: {
+        width: Util.size.width,
+        paddingLeft: 15,
+        paddingRight: 15,
+    },
+    recordItem: {
+        height: 40,
+        borderBottomWidth: Util.pixel, borderBottomColor: "#bbb",
+        paddingTop: 5, paddingLeft: 10, paddingRight: 10, paddingBottom: 5,
+        flexDirection: "row",
+        alignItems: "center"
+    },
+    recordItemTitle: {
+        backgroundColor: "transparent",
+        flex: 1,
+        textAlign: "left",
+        paddingLeft: 20,
+        color: "#777"
+    },
+    recordItemTime: {
+        backgroundColor: "transparent",
+        flex: 1,
+        textAlign: "right",
+        paddingRight: 20,
+        color: "#222"
+    },
+}
 class TimerRecordComponent extends Component {
     constructor(props) {
         super(props);
@@ -57,12 +86,10 @@ class TimerRecordComponent extends Component {
         let labelStr = '1111';
         return (
             <TouchableHighlight>
-                <View>
-                    <View>
-                        <Text>
-                            {rowData + ' - ' + labelStr}
-                        </Text>
-                    </View>
+                <View style={styles.recordItem}>
+                    <Text style={styles.recordItemTitle}>
+                        {rowData + ' - ' + labelStr}
+                    </Text>
                 </View>
             </TouchableHighlight>
         );
@@ -70,9 +97,9 @@ class TimerRecordComponent extends Component {
 
     render() {
         return (
-            <ListView
-                dataSource={this.state.dataSource}
-                renderRow={this._renderRow}
+            <ListView style={styles.recordList}
+                      dataSource={this.state.dataSource}
+                      renderRow={this._renderRow}
             />
         )
     }
