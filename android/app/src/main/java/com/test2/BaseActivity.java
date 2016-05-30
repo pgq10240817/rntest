@@ -5,6 +5,7 @@ import android.util.Log;
 import com.facebook.react.ReactActivity;
 import com.facebook.react.ReactPackage;
 import com.facebook.react.shell.MainReactPackage;
+import com.oblador.vectoricons.VectorIconsPackage;
 import com.yhpl.models.SimpleReactPackage;
 
 import java.util.Arrays;
@@ -48,6 +49,7 @@ public abstract class BaseActivity extends ReactActivity {
     protected List<ReactPackage> getPackages() {
         return Arrays.<ReactPackage>asList(
                 new MainReactPackage(),
+                new VectorIconsPackage(),
                 new SimpleReactPackage()
         );
     }

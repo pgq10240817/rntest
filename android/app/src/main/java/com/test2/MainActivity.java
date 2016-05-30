@@ -1,15 +1,6 @@
 package com.test2;
 
-import android.os.AsyncTask;
 import android.os.Bundle;
-import android.os.PersistableBundle;
-
-import com.facebook.react.ReactActivity;
-import com.facebook.react.ReactPackage;
-import com.facebook.react.shell.MainReactPackage;
-
-import java.util.Arrays;
-import java.util.List;
 
 public class MainActivity extends BaseActivity {
 

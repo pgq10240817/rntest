@@ -9,7 +9,7 @@ import {
     TouchableOpacity,
 } from 'react-native';
 //import {CountTimeComponent} from './app/30days/day1/view/CountTimeRender2.native'
-import WeatherComponent from './app/30days/day2/day2';
+import ComponentDefault from './app/30days/day3/day3';
 const styles = {
     divRoot: {
         flex: 1,
@@ -26,9 +26,9 @@ const styles = {
 class MyComponent extends Component {
     render() {
         return (
-            <View style={styles.divRoot}>
-                <WeatherComponent/>
-            </View>
+            <Animated.View style={[styles.divRoot,{opacity:this.state.opacityAnim}]}>
+                <ComponentDefault/>
+            </Animated.View>
         )
     }
 }
