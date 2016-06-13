@@ -18,6 +18,7 @@ const styles = {
         alignItems: 'center',
         backgroundColor: 'whitesmoke',
     }
+    
 
 
 }
