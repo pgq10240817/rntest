@@ -1,6 +1,8 @@
 import React, {Component} from 'react';
-import {ListView, StyleSheet, Text, View,TouchableHighlight} from 'react-native';
+import {ListView, StyleSheet, Text, TouchableHighlight, View} from 'react-native';
 import {StackNavigator} from 'react-navigation';
+import YHPLTextInputComponent from './test/Text'
+import DetailComponent from  './test/Detail'
 
 const Sly = StyleSheet.create({
     div:{
@@ -25,28 +27,13 @@ const Sly = StyleSheet.create({
         fontWeight:'bold',
     },
 });
-const Date = [{title:"1"},{title:"222"}];
+// const Date = [{title:"1"},{title:"222"}];
+const Date = [
+    {title:"TestText", navigation: 'TestText',},
+    {title:"Detail", navigation: 'Detail',}
+];
 
 
-class DetailComponent extends Component{
-    static navigationOptions = {
-        title: 'Detail',
-    };
-    constructor(props){
-        super(props);
-        this.state = {
-            content:props.navigation.state.params.param
-        }
-    };
-    render(){
-        return (
-            <View style={[Sly.div,Sly.center]}>
-                <Text
-                    style={Sly.text}>content is : {this.state.content}</Text>
-            </View>
-        )
-    }
-}
 
 class MainComponnet extends Component{
     static navigationOptions = {
@@ -80,10 +67,6 @@ class MainComponnet extends Component{
         console.log('renderListView:'+this);
         return (
             <View style={Sly.div}>
-                <Text
-                    onPress={()=>{this._showDialog('222')}}
-                    style={Sly.text}>111111</Text>
-
             <ListView
                 dataSource={this.state.dataSource}
                 renderRow={this._bindData}
@@ -92,17 +75,17 @@ class MainComponnet extends Component{
             </View>
         );
     }
-    showDialog(content:string){
+    navifationToComponent(screenName:string,content:string){
         // alert(content);
         // const { navigate } = this.props.navigation;
-        this.props.navigation.navigate('Detail',{param:'2222'});
+        this.props.navigation.navigate(screenName,{param:content});
     }
     bindData(bean) {
         console.log('bindData:'+bean);
         return (
             <TouchableHighlight style={[Sly.item, Sly.center]}
                                 underlayColor='#00000010'
-                                onPress={()=>{this.showDialog(bean.title)}}>
+                                onPress={()=>{this.navifationToComponent(bean.navigation, bean.title)}}>
                 <Text
                     style={Sly.text}>{bean.title}</Text>
             </TouchableHighlight>
@@ -112,7 +95,8 @@ class MainComponnet extends Component{
 }
 const StackNavigatorDecorator = StackNavigator({
     Main: { screen: MainComponnet },
-    Detail:{screen:DetailComponent}
+    Detail:{screen:DetailComponent},
+    TestText: {screen:YHPLTextInputComponent}
 });
 
 
