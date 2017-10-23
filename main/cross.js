@@ -3,6 +3,7 @@ import {ListView, StyleSheet, Text, TouchableHighlight, View} from 'react-native
 import {StackNavigator} from 'react-navigation';
 import YHPLTextInputComponent from './test/Text'
 import DetailComponent from  './test/Detail'
+import YHPLGalleryComponentTest from './test/Image'
 
 const Sly = StyleSheet.create({
     div:{
@@ -30,7 +31,8 @@ const Sly = StyleSheet.create({
 // const Date = [{title:"1"},{title:"222"}];
 const Date = [
     {title:"TestText", navigation: 'TestText',},
-    {title:"Detail", navigation: 'Detail',}
+    {title:'TestGallery', navigation:'TestGallery',},
+    {title:"Detail", navigation: 'Detail',},
 ];
 
 
@@ -61,6 +63,9 @@ class MainComponnet extends Component{
     }
 
     render(){
+        // return (
+        //     <View/>
+        // )
         return this.renderListView();
     }
     renderListView(){
@@ -96,7 +101,8 @@ class MainComponnet extends Component{
 const StackNavigatorDecorator = StackNavigator({
     Main: { screen: MainComponnet },
     Detail:{screen:DetailComponent},
-    TestText: {screen:YHPLTextInputComponent}
+    TestText: {screen:YHPLTextInputComponent},
+    TestGallery : {screen: YHPLGalleryComponentTest},
 });
 
 
