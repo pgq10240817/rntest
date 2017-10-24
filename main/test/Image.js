@@ -1,5 +1,5 @@
 import React, {Component} from 'react';
-import {ListView, StyleSheet, Text, TouchableHighlight, TouchableOpacity,Image, View} from 'react-native';
+import {ListView, StyleSheet, Text, TouchableHighlight, TouchableOpacity,Image,Picker, View} from 'react-native';
 import {StackNavigator} from 'react-navigation';
 import SingleGalleryEmitter from './GalleryEmitter'
 
@@ -130,7 +130,9 @@ export default class YHPLGalleryComponentTest extends Component{
         super(props);
         this.state={
             index:0,
+            resizeMode:'cover',
         };
+        // this.onPickerValueChanged = this.onPickerValueChanged.bind(this);
     }
     render(){
         return (
@@ -147,6 +149,7 @@ export default class YHPLGalleryComponentTest extends Component{
                     </TouchableOpacity>
                 </View>
                 {this.renderImageResizeActionButtons()}
+                {this.renderPicker()}
             </View>
         )
     }
@@ -180,6 +183,29 @@ export default class YHPLGalleryComponentTest extends Component{
     }
     onImageAction(action:string){
         SingleGalleryEmitter.emit("imageResize",action);
+        this.setState({
+            resizeMode:action,
+        })
+    }
+    renderPickerItemAtKey(key:string){
+        return (
+            <Picker.Item key={key} value={key} label={key}></Picker.Item>
+        )
+    }
+    renderPicker(){
+        let pickerView = [];
+        for (key in Image.resizeMode){
+            pickerView.push(this.renderPickerItemAtKey(key));
+        }
+        return (
+            <Picker
+                mode={Picker.MODE_DIALOG}
+                style={{width:200,height:100}}
+                selectedValue={this.state.resizeMode}
+                onValueChange={(value)=>{this.onImageAction(value)}}>
+                {pickerView}
+            </Picker>
+        )
     }
 }
 
